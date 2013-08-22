@@ -1,0 +1,248 @@
+html {
+	height: 100%;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	font-size: 80%;
+	min-width: 1350px;
+	background-color: #476EAD;
+	color: #36517D;
+	height: 100%;
+	position: relative;
+	overflow-y: hidden;
+}
+
+h1 {
+	font-size: 24px;
+	color: #FFF;
+	text-shadow:3px 3px #36517D;
+}
+
+h3 {
+	font-size: 18px;
+	margin: 10px;
+}
+
+h4 {
+	margin: 10px;
+	font-size: 14px;
+}
+
+p {
+	margin: 10px 10px 10px;
+	font-size: 12px;
+	text-align: left;
+}
+
+#courseDescr {
+	margin-bottom: 20px;
+}
+
+#helplink {
+	margin: 2px;
+	text-decoration: underline;
+	cursor: hand;
+	cursor: pointer;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+#cbtable {
+	font: 10px sans-serif;
+}
+
+label {
+	margin: 1px;
+}
+
+#arrow {
+	vertical-align: middle;
+}
+
+#helpDialog {
+	opacity: 1;
+}
+
+#questionmark {
+	float: right;
+	cursor: hand;
+	cursor: pointer;
+}
+
+#formheader {
+	height: 30px;
+	line-height: 30px;
+	cursor: hand;
+	cursor: pointer;
+}
+
+#formbox, #svgbox, #descrBox {
+	border-radius: 10px;
+	box-shadow: 10px 10px 5px #36517D;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #36517D;
+	background-color: #FFFFFF;
+}
+
+#formbox {
+	margin: 10px;
+	display: block;
+	padding: 0px 20px 20px 20px;
+}
+
+input, select {
+	font-family: Arial, sans-serif;
+	border: 1px solid #36517D;
+	outline-color: #FFE991;
+	color: #36517D;
+}
+
+#optionbar {
+	vertical-align: middle;
+}
+
+#button {
+	margin-left: 20px;
+	color: #36517D;
+	box-shadow: 0px 2px 2px #CCC;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #E8A517;
+	border-radius: 5px;
+	height: 30px;
+	width: 150px;
+	font-size: 15px;
+	text-align: center;
+	cursor: hand;
+	cursor: pointer;
+	
+	/* Button gradient for different browsers */
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFE991), to(#FFCB5C));
+	background: -moz-linear-gradient(top,  #FFE991,  #FFCB5C);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFE991', endColorstr='#FFCB5C');
+}
+
+#button:hover {
+	border-width: 2px;
+}
+
+#button:active {
+	/* Give button a darker colour when it's clicked */
+	background: -webkit-gradient(linear, left top, left bottom, from(#EBD788), to(#DEB152));
+	background: -moz-linear-gradient(top,  #EBD788,  #DEB152);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#EBD788', endColorstr='#DEB152');
+}
+
+#bigbox {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 20px;
+	top: 400px;
+	padding: 10px;
+	/*margin-bottom: 0px;*/
+}
+
+#svg {
+	height: 100%;
+	width: 100%;
+}
+
+#svgbox {
+	height: 100%;
+	margin-right: 320px;
+}
+
+#descrBox {
+	height: 100%;
+	width: 300px;
+	float: right;
+	overflow-y: auto;
+}
+
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+path.link.coreq {
+	stroke-dasharray: 0,2 1;
+}
+
+path.link.prereq {
+
+}
+
+circle {
+  stroke: #333;
+  stroke-width: 1.5px;
+  cursor: mouse;
+  cursor: pointer;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+text.shadow {
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-opacity: .8;
+}
+
+/* Start by setting display:none to make this hidden.
+   Then we position it in relation to the viewport window
+   with position:fixed. Width, height, top and left speak
+   speak for themselves. Background we set to 80% white with
+   our animation centered, and no-repeating */
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('ajax-loader.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+.compass{
+    fill:  #fff;
+    stroke:  #36517D;
+    stroke-width:  1.5;
+}
+
+.button{
+    fill:  #FFCB5C;
+    stroke:  #E8A517;
+    stroke-miterlimit:  6;
+    stroke-linecap:  round;
+    cursor: hand;
+    cursor: pointer;
+}
+
+.button:hover{
+    stroke-width:  2;
+}
+
+.plus-minus{
+    fill:  #36517D;
+    pointer-events: none;
+}

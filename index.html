@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<!-- AUTHOR: Frances Russell, DATE: May 8, 2013 -->
+<head>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="stylesheet" href="ubcnetworksstyle.css" type="text/css" />
+	<link rel="stylesheet" href="jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.min.css" type="text/css" />
+    <script src="jquery-2.0.0.min.js"></script>
+    <script src="jquery-mousewheel-3.1.3/jquery.mousewheel.js" type="text/javascript"></script>
+    <script src="jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
+    <script src="networkgenerator_draggable.js"></script>
+    <script type="text/javascript" src="d3/d3.v3.js"></script>
+    <script type="text/ecmascript">
+		//<![CDATA[
+  		var transMatrix = [1,0,0,1,0,0];
+         
+  		function init(evt) {
+    		if ( window.svgDocument == null ) {
+      			svgDoc = evt.target.ownerDocument;
+    		}
+    		networkMatrix = svgDoc.getElementById("graphics");
+  		}
+		//]]>
+	</script>
+    <!-- Script for Google Analytics -->
+    <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-43093160-1', 'ubc.ca');
+	  ga('send', 'pageview');
+
+    </script>
+    <meta charset="utf-8">
+    <title>UBC Course Networks</title>
+
+</head>
+<body>
+	<img id="questionmark" width="35px" src="question_mark.png" alt="Help" onclick="openHelp()" title="How it works">
+    <center id="pageheading" ><h1>UBC Course Networks</h1></center>
+
+	<div id="formbox">
+	    <div id="formheader">
+	    	<img id="arrow" align="left" width="35px" src="expand_arrow.png" alt="Expand/collapse options">
+	    	<h3>Choose your parameters...</h3>
+    	</div>
+    	
+    	<div id="parameters">
+    	<form id = "form" method="GET">
+    		<!-- List of checkboxes dynamically populated with UBC departments -->
+    		<table id="cbtable">
+    			<tr><td>
+    			<input type="checkbox" id="alldepts" value="alldepts">
+    			<label for="alldepts">Select All</label>
+    			</td></tr>
+			</table><br>
+		
+			<div id="optionbar">
+			<label for="campus">Campus:</label>
+			<select id="campus">
+				<option value="UBC" selected>UBC</option>
+				<option value="UBCO">UBCO</option>
+			</select>
+		
+			<label for="session">Session:</label>
+			<select id="session">
+				<option value="ALL" selected>All</option>
+			</select>
+		
+			<label for="maxcode">Maximum Course Code:</label>
+			<input type="text" id="maxcode" value="499" maxlength="3" size="3">
+		
+			<input id="button" type="submit" value="Generate Network">
+			</div>
+		</form>
+		</div>
+	</div>
+	
+	<div id="bigbox">
+	<div id="descrBox">
+		<h3 id="courseName" align="center"></h3>
+		<h3 id="courseTitle" align="center"></h3>
+		<h4 id="courseSize" align="left"></h4>
+		<h4 id="courseSessions" align="left"></h4>
+	    <h4 id="prereqTitle" align="left" style="display:none">Prerequisites:</h4>
+	        <p id="coursePrereqs" align="left"></p>
+	    <h4 id="coreqTitle" align="left" style="display:none">Corequisites:</h4>
+	        <p id="courseCoreqs" align="left"></p>
+		<p id="courseDescr"></p>
+		<h3 align="center">Legend</h3>
+		<img src="network_legend.png" width="280px" margin="20px">
+ 	</div>
+	
+	<div id="svgbox">
+		<svg id="svg" onload="init(evt)">
+			<defs id="svgdefs"></defs>
+			<g id="graphics"></g>
+			
+			<!-- Zoom and pan navigation for network - Taken from tutorial by http://www.petercollingridge.co.uk -->
+			<svg id="navigator" visibility="hidden">
+				<circle cx="50" cy="50" r="42" fill="white" opacity="0.75"></circle>
+				<path class="button" onclick="pan(0,20)" d="M50 10 l12 20 a40,70 0 0,0 -24,0z"> </path>
+				<path class="button" onclick="pan(20,0)" d="M10 50 l20 -12 a70,40 0 0,0 0,24z"> </path>
+				<path class="button" onclick="pan(0,-20)" d="M50 90 l12 -20 a40,70 0 0,1 -24,0z"> </path>
+				<path class="button" onclick="pan(-20,0)" d="M90 50 l-20 -12 a70,40 0 0,1 0,24z"> </path>
+   
+				<circle class="compass" cx="50" cy="50" r="20"></circle>
+				<circle class="button"  cx="50" cy="41" r="8" onclick="zoom(0.9)"></circle>
+				<circle class="button"  cx="50" cy="59" r="8" onclick="zoom(1.1)"></circle>
+ 
+				<rect class="plus-minus" x="46" y="39.5" width="8" height="3"></rect>
+				<rect class="plus-minus" x="46" y="57.5" width="8" height="3"></rect>
+				<rect class="plus-minus" x="48.5" y="55" width="3" height="8"></rect>
+			</svg>
+
+    	<!-- Process the embedded XHTML if the requiredExtensions attribute
+         evaluates to true (i.e., the user agent supports XHTML
+         embedded within SVG). -->
+    	<foreignObject id="networktools" width="170" height="170" x="10" y="100" visibility="hidden"
+                   requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+      	<!-- XHTML content goes here -->
+      	<input id = "freeze" type="checkbox" name="freeze" onclick="freezeNetwork(this)"/>Freeze<br><br>
+      	<!--<input id = "highlight" type="checkbox" name="highlight" />Highlight -->
+	<h4 style="margin:2px;">Click course to:</h4>
+	<input type="radio" name="highlight" value="off" checked="checked">Do nothing<br>
+	<input type="radio" name="highlight" value="course">Highlight it<br>
+	<input type="radio" name="highlight" value="pathto">Highlight all paths to it<br>
+	<input type="radio" name="highlight" value="pathfrom">Highlight all paths from it<br>
+	<!--<input type="radio" name="highlight" value="delete">Remove it (experimental)<br> -->
+	<h4 id="helplink" onclick="openHelp()">Help</h4>
+
+	</foreignObject>
+		</svg>
+	</div>
+	</div>
+	
+	<div id="helpDialog" title="How to Use the Network Generator">
+	  <h5>Creating a Network</h5>
+	  <p>Select your campus, session, and one or more departments, then click "Generate Network".  In the network drawing,
+	    circles represent courses, and arrows show which courses are prequisites or corequisites for others.  All courses with
+	    course codes higher than the "Maximum Course Code" are left out.  This is set to 499 by default to ignore graduate level
+	    courses.</p>
+	  <p>The network generator will draw all the courses that match your selection, as well as any others
+	    that are prerequisites or corequisites for them. Courses that are listed as prerequisites or corequisites but aren't in the
+	calendar for your selected session(s) are shown in light pink.</p>
+	  <h5>Interacting With the Network</h5>
+	  <p> When you click on a course node, information about the course will appear in the box on the right.  You can also click and drag
+	  	course nodes to stick them in certain positions.  In the upper left corner of the network box, there are a few extra tools.
+	    Use the compass tool to zoom in and out or move the view.  Check the "freeze" box to stop every node where it is, and uncheck it
+	  	to start them moving again.</p>
+	<p>Under "Click course to:", there are several different options.  "Highlight it" allows you to highlight individual
+		 important courses, and click them again to un-highlight. "Highlight all paths to it" highlights every course in every possible path 
+		<i>to</i> the course you click on. "Highlight all paths from it" highlights every course in every possible path <i>from</i> the course
+		 you click on. With either of these options, clicking an already-highlighted course will un-highlight all courses in the path.</p>
+	  <h5>Helping Improve the Website</h5>
+	  <p>This website is still under active development, so there may be bugs!  It's a good idea to cross-check the prerequisites drawn
+	  	in the network against what is written in the course description in the side bar to make sure nothing was lost in translation.  Please
+  	<a href="https://docs.google.com/forms/d/10qIxCzYPl-73MkeGNeGn-NYYHElfPfKuRLPhkd2fj6E/viewform">fill out the survey</a> if you found the
+		website interesting or useful, if you found problems, or if you have any ideas on how to improve it.  You can also look at the
+		 source code <a href="http://hallam.microbiology.ubc.ca/UBCCourseNetworks/Home.html" target="_blank">here</a>.</p>
+	</div>
+	
+	<!-- "Loading" bar -->
+	<div class="modal"></div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+.DS_Store
+logfile.txt
+
+# XML files of UBC courses:
+*UBC_courses.xml
+*UBCO_courses.xml
