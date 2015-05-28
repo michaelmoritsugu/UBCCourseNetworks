@@ -87,7 +87,7 @@ def sessionExists(year, season):
         tree = ET.parse(response)
         root = tree.getroot()
         return True
-    except expat.ExpatError as e:
+    except (expat.ExpatError, ET.ParseError) as e:
         return False
 
 def getValidSessions():
